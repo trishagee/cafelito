@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    maven { url "http://localhost:8088/artifactory/repo1" }
+}
+
+dependencies {
+    compile 'com.yammer.dropwizard:dropwizard-core:0.6.2'
+    compile 'org.mongojack:mongojack:2.0.0'
+
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'org.objenesis:objenesis:2.1'
+    testCompile 'org.codehaus.groovy:groovy-all:2.2.1'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
