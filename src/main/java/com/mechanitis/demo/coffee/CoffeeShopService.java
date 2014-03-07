@@ -23,5 +23,6 @@ public class CoffeeShopService extends Service<CoffeeShopConfiguration> {
         MongoClient mongoClient = new MongoClient();
         DB database = mongoClient.getDB("TrishaCoffee");
         environment.addResource(new CoffeeShopResource(database));
+        environment.manage(new MongoClientManager(mongoClient));
     }
 }
