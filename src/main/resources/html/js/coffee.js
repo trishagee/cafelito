@@ -7,5 +7,7 @@ coffeeApp.controller('DrinksController', function ($scope) {
         {name: 'Tea', family: 'that other drink'},
         {name: 'Cappuccino', family: 'Coffee'}
     ]
+    $scope.sizes = ['Small', 'Medium', 'Large']
+
 
 })
