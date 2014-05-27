@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
+
+<div ng-controller="CoffeeShopController" class="container">
+    <div class="form-group">
+        <input type="button" class="btn btn-default" value="Find my coffee shop" ng-click="findCoffeeShopNearestToMe()"/>
+    </div>
+    <div class="panel panel-default" ng-show="nearestCoffeeShop">
+        <div class="panel-body">
+            <strong> {{nearestCoffeeShop.name}} </strong>
+            <a ng-href="https://www.google.co.uk/maps?q={{nearestCoffeeShop.name}}+near+{{nearestCoffeeShop.location.coordinates[1]}},{{nearestCoffeeShop.location.coordinates[0]}}">Map</a>
+        </div>
+    </div>
+</div>
+
 <div class="container" ng-controller="OrderController">
     <form ng-submit="giveMeCoffee()">
         <alert ng-repeat="message in messages" type="message.type" close="closeAlert($index)">
