@@ -8,6 +8,11 @@
 
 <div ng-controller="OrderController" class="container">
     <form ng-submit="giveMeCoffee()">
+        <alert ng-repeat="message in messages" type="message.type" close="closeAlert($index)">
+            {{message.msg}}
+            {{message.order}}
+        </alert>
+
         <div class="form-group">
             <label>Drink</label>
             <select ng-model="drink.type" ng-options="type.name for type in types | orderBy: 'name'" class="form-control"></select>
@@ -31,6 +36,7 @@
 
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/angular-resource.min.js"></script>
+<script type="text/javascript" src="js/ui-bootstrap-tpls-0.10.0.min.js"></script>
 <script type="text/javascript" src="js/coffee.js"></script>
 </body>
 </html>
