@@ -12,7 +12,10 @@ xmlSlurper.node.each { child ->
                       'location'       : ['coordinates': [Double.valueOf(child.@lon.text()), Double.valueOf(child.@lat.text())],
                                           'type'       : 'Point']]
     child.tag.each { theNode ->
-        coffeeShop.put(theNode.@k.text(), theNode.@v.text())
+        def fieldName = theNode.@k.text()
+        if (isValidFieldName(fieldName)){
+            coffeeShop.put(fieldName, theNode.@v.text())
+        }
     }
     if (coffeeShop.name != null) {
         println coffeeShop
@@ -24,3 +27,6 @@ println "\nTotal imported: $collection.count"
 
 collection.createIndex(new BasicDBObject('location', '2dsphere'))
 
+private boolean isValidFieldName(fieldName) {
+    !fieldName.contains('.') && fieldName != 'location'
+}

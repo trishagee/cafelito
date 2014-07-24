@@ -1,4 +1,4 @@
-package com.mechanitis.demo
+package com.mechanitis.demo.coffee
 
 import com.mechanitis.demo.coffee.CoffeeShopResource
 import com.mechanitis.demo.coffee.DrinkType
@@ -13,21 +13,25 @@ import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.Response
 
 class CoffeeShopResourceSpecification extends Specification {
-    def 'should return a dummy shop for testing'() {
+    def 'should return closest coffee shop to Portland Conference Center'() {
         given:
-        def coffeeShop = new CoffeeShopResource(null)
+        def mongoClient = new MongoClient()
+        def coffeeShop = new CoffeeShopResource(mongoClient)
 
         when:
-        def nearestShop = coffeeShop.getDummy()
+        double latitude = 45.5285859
+        double longitude = -122.6631354
+        def nearestShop = coffeeShop.getNearest(latitude, longitude)
 
         then:
-        nearestShop.name == 'A dummy coffee shop'
+        nearestShop.name == 'Tiny\'s Coffee'
+        println nearestShop
     }
 
     def 'should return Cafe Nero as the closest coffee shop to Westminster Abbey'() {
         given:
         def mongoClient = new MongoClient()
-        def coffeeShop = new CoffeeShopResource(mongoClient.getDB("TrishaCoffee"))
+        def coffeeShop = new CoffeeShopResource(mongoClient)
 
         when:
         double latitude = 51.4994678
@@ -39,10 +43,26 @@ class CoffeeShopResourceSpecification extends Specification {
         println nearestShop.allValues
     }
 
-    def 'should return Costa as the closest coffee shop to Earls Court Road'() {
+    def 'should return Chicago coffee shop'() {
         given:
         def mongoClient = new MongoClient()
         def coffeeShop = new CoffeeShopResource(mongoClient.getDB("TrishaCoffee"))
+
+        when:
+        double latitude = 41.900221
+        double longitude = -87.623436
+        def nearestShop = coffeeShop.getNearest(latitude, longitude)
+
+        then:
+        println nearestShop
+        nearestShop.name == 'Starbucks'
+        println nearestShop.allValues
+    }
+
+    def 'should return Costa as the closest coffee shop to Earls Court Road'() {
+        given:
+        def mongoClient = new MongoClient()
+        def coffeeShop = new CoffeeShopResource(mongoClient)
 
         when:
         double latitude = 51.4950233
@@ -51,13 +71,13 @@ class CoffeeShopResourceSpecification extends Specification {
 
         then:
         nearestShop.name == 'Costa'
-        println nearestShop.allValues
+        println nearestShop
     }
 
-    def 'should return null if no coffee shop found'() {
+    def 'should return 404 if no coffee shop found'() {
         given:
         def mongoClient = new MongoClient()
-        def coffeeShop = new CoffeeShopResource(mongoClient.getDB("TrishaCoffee"))
+        def coffeeShop = new CoffeeShopResource(mongoClient)
 
         when:
         double latitude = 37.3981841
@@ -65,16 +85,21 @@ class CoffeeShopResourceSpecification extends Specification {
         def nearestShop = coffeeShop.getNearest(latitude, longitude)
 
         then:
-        nearestShop == null
+        def exception = thrown(WebApplicationException)
+        exception.response.status == Response.Status.NOT_FOUND.statusCode
     }
 
     def 'should give me back the order ID when an order is successfully created'() {
         given:
-        DB database = Mock()
-        database.getCollection(_) >> { Mock(DBCollection) }
+        def collection = Mock(DBCollection)
+        collection.getName() >> 'CollectionName'
+        def database = Mock(DB)
+        database.getCollection(_) >> { collection }
+        def mongoClient = Mock(MongoClient)
+        mongoClient.getDB(_) >> { database }
 
-        def coffeeShop = new CoffeeShopResource(database)
-        def order = new Order()
+        def coffeeShop = new CoffeeShopResource(mongoClient)
+        def order = new Order(new String[0], new DrinkType('espresso', 'coffee'), 'medium', 'Me')
 
         //set ID for testing
         def orderId = new ObjectId()
@@ -94,10 +119,10 @@ class CoffeeShopResourceSpecification extends Specification {
         given:
         def mongoClient = new MongoClient()
         def database = mongoClient.getDB("TrishaCoffee")
-        def collection = database.getCollection('orders')
+        def collection = database.getCollection('Order')
         collection.drop();
 
-        def coffeeShop = new CoffeeShopResource(database)
+        def coffeeShop = new CoffeeShopResource(mongoClient)
 
         def drinkType = new DrinkType()
         drinkType.with {
@@ -152,7 +177,17 @@ class CoffeeShopResourceSpecification extends Specification {
         def database = mongoClient.getDB("TrishaCoffee")
 
         def coffeeShop = new CoffeeShopResource(database)
-        def expectedOrder = new Order([] as String[], new DrinkType('filter', 'coffee'), 'super small', 'Yo')
+        def drinkType = new DrinkType()
+        drinkType.with {
+            family = 'filter'
+            name = 'coffee'
+        }
+        def expectedOrder = new Order()
+        expectedOrder.with {
+            size = 'super small'
+            drinker = 'Yo'
+            type = drinkType
+        }
 
         def coffeeShopId = 89438
         coffeeShop.saveOrder(coffeeShopId, expectedOrder);
