@@ -6,6 +6,29 @@ coffeeApp.factory('CoffeeOrder', function ($resource) {
     );
 });
 
+coffeeApp.factory('CoffeeShopLocator', function ($resource) {
+    return $resource('/service/coffeeshop/nearest/:latitude/:longitude',
+        {latitude: '@latitude', longitude: '@longitude'}, {});
+});
+
+coffeeApp.controller('CoffeeShopController', function ($scope, $window, CoffeeShopLocator) {
+    $scope.findCoffeeShopNearestToMe = function () {
+        window.navigator.geolocation.getCurrentPosition(function (position) {
+            CoffeeShopLocator.get({latitude: position.coords.latitude, longitude: position.coords.longitude}).$promise
+                .then(
+                function (value) {
+                    $scope.nearestCoffeeShop = value;
+                })
+                .catch(
+                function (value) {
+                    //default coffee shop
+                    $scope.getCoffeeShopAt(51.4994678, -0.128888);
+                });
+        });
+    };
+    $scope.findCoffeeShopNearestToMe();
+});
+
 coffeeApp.controller('OrderController', function ($scope, CoffeeOrder) {
     $scope.types = [
         {name: 'Americano', family: 'Coffee'},
