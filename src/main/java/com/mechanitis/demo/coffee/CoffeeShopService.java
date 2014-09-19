@@ -19,6 +19,8 @@ public class CoffeeShopService extends Service<CoffeeShopConfiguration> {
 
     @Override
     public void run(final CoffeeShopConfiguration configuration, final Environment environment) throws Exception {
-        environment.addResource(new CoffeeShopResource(new MongoClient()));
+        MongoClient mongoClient = new MongoClient();
+        environment.manage(new MongoClientManager(mongoClient));
+        environment.addResource(new CoffeeShopResource(mongoClient));
     }
 }
