@@ -1,9 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="coffeeApp">
 <head>
     <title>Cafelito - Order Your Coffee!</title>
 </head>
 <body>
+<div ng-controller="OrderController" class="container">
+    <div class="form-group">
+        <label>Drink</label>
+        <select ng-model="drink.type" ng-options="type.name for type in types | orderBy: 'name'" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Size</label>
+        <select ng-model="drink.size" ng-options="size for size in sizes" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label>Your name</label>
+        <input type="text" ng-model="drink.drinker" ng-required="true" class="form-control"/>
+    </div>
 
+</div>
+
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/coffee.js"></script>
 </body>
 </html>
