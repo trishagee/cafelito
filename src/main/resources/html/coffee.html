@@ -7,6 +7,10 @@
 </head>
 <body>
 <div ng-controller="OrderController" class="container">
+    <alert ng-repeat="message in messages" type="message.type" close="closeAlert($index)">
+        {{message.msg}}
+    </alert>
+
     <form ng-submit="giveMeCoffee()">
 
         <div class="form-group">
@@ -33,5 +37,6 @@
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/coffee.js"></script>
 <script type="text/javascript" src="js/angular-resource.min.js"></script>
+<script type="text/javascript" src="js/ui-bootstrap-tpls-0.10.0.min.js"></script>
 </body>
 </html>
