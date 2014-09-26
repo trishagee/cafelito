@@ -21,6 +21,17 @@
             <label>Size</label>
             <select ng-model="drink.size" ng-options="size for size in sizes" class="form-control"></select>
         </div>
+        <div class="form-group" ng-show="drink.type && drink.size">
+            <label>Options</label>
+            <input type="text" ng-model="newOption"
+                   typeahead="option.name for option in availableOptions | filter:$viewValue | orderBy:'name'"
+                   typeahead-on-select="addOption()"
+                   class="form-control" placeholder="Type milk or syrups or extras here">
+        </div>
+        <div class="form-group" ng-show="drink.selectedOptions">
+            <label>Selected Options</label>
+            <span ng-repeat="selectedOption in drink.selectedOptions"> {{selectedOption}},</span>
+        </div>
         <div class="form-group">
             <label>Your name</label>
             <input type="text" ng-model="drink.drinker" ng-required="true" class="form-control"/>
