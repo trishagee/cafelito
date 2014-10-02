@@ -1,5 +1,6 @@
 package com.mechanitis.demo.coffee;
 
+import com.mongodb.MongoClient;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -19,6 +20,6 @@ public class CoffeeShopService extends Service<Configuration> {
 
     @Override
     public void run(final Configuration configuration, final Environment environment) throws Exception {
-        environment.addResource(new CoffeeShopResource());
+        environment.addResource(new CoffeeShopResource(new MongoClient()));
     }
 }
