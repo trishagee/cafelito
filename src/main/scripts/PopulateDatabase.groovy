@@ -8,12 +8,13 @@ collection.drop()
 def xmlSlurper = new XmlSlurper().parse(new File('resources/all-coffee-shops.xml'))
 
 xmlSlurper.node.each { child ->
-    Map coffeeShop = ['openStreetMapId': child.@id.text(),
-                      'location'       : ['coordinates': [Double.valueOf(child.@lon.text()), Double.valueOf(child.@lat.text())],
-                                          'type'       : 'Point']]
+    Map coffeeShop = [openStreetMapId: child.@id.text(),
+                      location       : [coordinates: [Double.valueOf(child.@lon.text()),
+                                                      Double.valueOf(child.@lat.text())],
+                                        type       : 'Point']]
     child.tag.each { theNode ->
         def fieldName = theNode.@k.text()
-        if (isValidFieldName(fieldName)){
+        if (isValidFieldName(fieldName)) {
             coffeeShop.put(fieldName, theNode.@v.text())
         }
     }
