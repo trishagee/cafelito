@@ -1,24 +1,23 @@
 import com.mongodb.BasicDBObject
 import com.mongodb.MongoClient
 
-def mongoClient = new MongoClient();
-def collection = mongoClient.getDB("Cafelito").getCollection("CoffeeShop")
+def mongoClient = new MongoClient()
+def collection = mongoClient.getDB('Cafelito').getCollection('CoffeeShop')
 collection.drop()
 
 def xmlSlurper = new XmlSlurper().parse(new File('resources/all-coffee-shops.xml'))
 
 xmlSlurper.node.each { child ->
-    Map coffeeShop = [openStreetMapId: child.@id.text(),
-                      location       : [coordinates: [Double.valueOf(child.@lon.text()),
-                                                      Double.valueOf(child.@lat.text())],
+    def coffeeShop = [openStreetMapId: child.@id.text(),
+                      location       : [coordinates: [child.@lon, child.@lat]*.text()*.toDouble(),
                                         type       : 'Point']]
-    child.tag.each { theNode ->
-        def fieldName = theNode.@k.text()
-        if (isValidFieldName(fieldName)) {
-            coffeeShop.put(fieldName, theNode.@v.text())
-        }
+
+    child.tag.findAll { n -> isValidFieldName(n.@k.text()) }.inject(coffeeShop) { r, n ->
+        r[n.@k.text()] = n.@v.text()
+        r
     }
-    if (coffeeShop.name != null) {
+
+    if (coffeeShop.name) {
         println coffeeShop
         collection.insert(new BasicDBObject(coffeeShop))
     }
