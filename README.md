@@ -8,6 +8,6 @@ There's a [page on my blog](http://trishagee.github.io/presentation/angularjs_ht
  - An interview describing the motivation behind this project in [this blog post](http://trishagee.github.io/presentation/interview_at_goto_chicago/).
  - The Groovy script that imports data into MongoDB has been dissected in 
 [this blog post](http://trishagee.github.io/post/groovy_import_to_mongodb/).
- - There's a recording of the  
+ - There's a recording of the 
 [Virtual User Group Session](http://virtualjug.com/html5-angularjs-groovy-java-and-mongodb-all-together-what-could-go-wrong/), 
 where you can see this application being built "live". 
