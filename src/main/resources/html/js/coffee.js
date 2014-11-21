@@ -1,6 +1,6 @@
-var coffeeApp = angular.module('coffeeApp', []);
+var coffeeApp = angular.module('coffeeApp', ['ngResource']);
 
-coffeeApp.controller('OrderController', function ($scope) {
+coffeeApp.controller('OrderController', function ($scope, $resource) {
     $scope.types = [
         {name: 'Americano', family: 'Coffee'},
         {name: 'Latte', family: 'Coffee'},
@@ -8,6 +8,11 @@ coffeeApp.controller('OrderController', function ($scope) {
         {name: 'Cappuccino', family: 'Coffee'}
     ];
     $scope.sizes = ['Small', 'Medium', 'Large'];
-
+    
+    $scope.giveMeCoffee = function() {
+        var coffeeOrder = $resource('/service/coffeeshop/order/');
+        $scope.drink.coffeeShopId = 1;
+        coffeeOrder.save($scope.drink)
+    }
 
 });
