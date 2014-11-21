@@ -9,7 +9,6 @@ import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.Response
 
 class CoffeeShopResourceSpecification extends Specification {
-    @Ignore('Not implemented yet')
     def 'should return closest coffee shop to Portland Conference Center'() {
         given:
         def mongoClient = new MongoClient()

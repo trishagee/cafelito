@@ -1,6 +1,34 @@
 var coffeeApp = angular.module('coffeeApp', ['ngResource', 'ui.bootstrap']);
 
-coffeeApp.controller('OrderController', function ($scope, $resource) {
+coffeeApp.service('LocalCoffeeShop', function () {
+    var localCoffeeShop;
+
+    this.setShop = function (shop) {
+        localCoffeeShop = shop;
+    };
+
+    this.getShop = function () {
+        return localCoffeeShop;
+    }
+});
+
+coffeeApp.controller('CoffeeShopController', function ($scope, $window, $resource, LocalCoffeeShop) {
+    var CoffeeShopLocator = $resource('/service/coffeeshop/nearest/:latitude/:longitude',
+        {latitude: '@latitude', longitude: '@longitude'}, {});
+
+    $scope.findCoffeeShopNearestToMe = function () {
+        window.navigator.geolocation.getCurrentPosition(function (position) {
+            CoffeeShopLocator.get({latitude: position.coords.latitude, longitude: position.coords.longitude},
+                function (foundCoffeeShop) {
+                    $scope.nearestCoffeeShop = foundCoffeeShop;
+                    LocalCoffeeShop.setShop(foundCoffeeShop);
+                });
+        });
+    };
+    $scope.findCoffeeShopNearestToMe();
+});
+
+coffeeApp.controller('OrderController', function ($scope, $resource, LocalCoffeeShop) {
     $scope.types = [
         {name: 'Americano', family: 'Coffee'},
         {name: 'Latte', family: 'Coffee'},
@@ -12,7 +40,7 @@ coffeeApp.controller('OrderController', function ($scope, $resource) {
     
     $scope.giveMeCoffee = function() {
         var coffeeOrder = $resource('/service/coffeeshop/order/');
-        $scope.drink.coffeeShopId = 1;
+        $scope.drink.coffeeShopId = LocalCoffeeShop.getShop().openStreetMapId;
         coffeeOrder.save($scope.drink, function (order) {
                 $scope.messages.push({type: 'success', msg: 'Order sent!'})
             }

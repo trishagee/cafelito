@@ -1,12 +1,16 @@
 package com.mechanitis.demo.coffee;
 
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
+import com.mongodb.QueryBuilder;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,13 +25,23 @@ public class CoffeeShopResource {
         datastore = new Morphia().createDatastore(mongoClient, "Cafelito");
     }
 
+    @Path("nearest/{latitude}/{longitude}")
+    @GET
+    public Object getNearest(@PathParam("latitude") double latitude,
+                             @PathParam("longitude") double longitude) {
+        return datastore.find(CoffeeShop.class)
+                        .field("location")
+                        .near(longitude, latitude, true)
+                        .get();
+    }
+
     @Path("order")
     @POST()
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveOrder(Order order) {
         datastore.save(order);
-        
+
         return Response.created(URI.create(order.getId())).entity(order).build();
     }
-    
+
 }
