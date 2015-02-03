@@ -20,6 +20,8 @@ public class CoffeeShopApplication extends Application<Configuration> {
     @Override
     public void run(Configuration configuration, Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/service/*");
-        environment.jersey().register(new CoffeeShopResource(new MongoClient()));
+        MongoClient mongoClient = new MongoClient();
+        environment.lifecycle().manage(new MongoClientManager(mongoClient));
+        environment.jersey().register(new CoffeeShopResource(mongoClient));
     }
 }
