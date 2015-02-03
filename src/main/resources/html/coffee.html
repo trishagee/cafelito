@@ -7,6 +7,15 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
 </head>
 <body>
+    <div ng-controller="CoffeeShopController" class="container">
+        <div class="panel panel-default" ng-show="nearestCoffeeShop">
+            <div class="panel-body">
+                Your coffee will be ready for pick up at: <strong> {{nearestCoffeeShop.name}} </strong>
+                <a ng-href="https://maps.google.com/maps/place/@{{nearestCoffeeShop.location.coordinates[1]}},{{nearestCoffeeShop.location.coordinates[0]}},19z">[map]</a>
+            </div>
+        </div>
+    </div>
+
     <div ng-controller="OrderController" class="container">
         <alert ng-repeat="message in messages" type="message.type" close="closeAlert($index)">
             {{message.msg}}
