@@ -4,13 +4,12 @@ version = '1.0'
 
 repositories {
     mavenCentral()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
     compile 'io.dropwizard:dropwizard-core:0.7.1'
     compile 'io.dropwizard:dropwizard-assets:0.7.1'
-    compile 'org.mongodb.morphia:morphia:0.110-SNAPSHOT'
+    compile 'org.mongodb.morphia:morphia:0.110'
 
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'cglib:cglib-nodep:3.1'
