@@ -62,7 +62,6 @@ class CoffeeShopResourceSpecification extends Specification {
             size = 'medium'
             drinker = 'Me'
             type = drinkType
-            selectedOptions = ['soy milk']
             coffeeShopId = 89438
         }
 
@@ -72,7 +71,6 @@ class CoffeeShopResourceSpecification extends Specification {
         then:
         collection.count == 1
         def createdOrder = collection.findOne()
-        createdOrder['selectedOptions'] == order.selectedOptions
         createdOrder['type'].name == order.type.name
         createdOrder['type'].family == order.type.family
         createdOrder['size'] == order.size
