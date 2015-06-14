@@ -6,27 +6,36 @@
 </head>
 <body>
     <div ng-controller="OrderController" class="container">
-        <div class="form-group">
-            <label>Drink type</label>
-            <select ng-model="drink.type"
-                    ng-options="type.name for type in types"
-                    class="form-control"></select>
-        </div>
-        <div class="form-group">
-            <label>Drink size</label>
-            <select ng-model="drink.size"
-                    ng-options="size for size in sizes"
-                    class="form-control"></select>
-        </div>
-        <div class="form-group">
-            <label>Your name</label>
-            <input type="text"
-                   ng-model="drink.drinker" ng-required="true"
-                   class="form-control"/>
-        </div>
+        <form ng-submit="giveMeCoffee()">
+
+            <div class="form-group">
+                <label>Drink type</label>
+                <select ng-model="drink.type"
+                        ng-options="type.name for type in types"
+                        class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>Drink size</label>
+                <select ng-model="drink.size"
+                        ng-options="size for size in sizes"
+                        class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>Your name</label>
+                <input type="text"
+                       ng-model="drink.drinker" ng-required="true"
+                       class="form-control"/>
+            </div>
+            <pre>{{drink | json}}</pre>
+            <div class="form-group">
+                <input type="submit" class="btn btn-default btn-lg"
+                       value="Give Me Coffee!!"/>
+            </div>
+        </form>
     </div>
 
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/coffee.js"></script>
+    <script type="text/javascript" src="js/angular-resource.min.js"></script>
 </body>
 </html>

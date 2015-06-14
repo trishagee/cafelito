@@ -1,5 +1,6 @@
 package com.mechanitis.demo.coffee;
 
+import com.mongodb.MongoClient;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
@@ -20,7 +21,7 @@ public class CoffeeShopApplication extends Application<Configuration> {
     public void run(Configuration configuration,
                     Environment environment) throws Exception {
         environment.jersey().setUrlPattern("/service/*");
-        environment.jersey().register(new CoffeeShopResource());
+        environment.jersey().register(new CoffeeShopResource(new MongoClient()));
 
     }
 }
