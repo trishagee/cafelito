@@ -14,12 +14,12 @@ public class CoffeeShopApplication extends Application<Configuration> {
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/html", "/coffeeshop"));
-
     }
 
     @Override
     public void run(Configuration configuration,
                     Environment environment) throws Exception {
+        environment.jersey().setUrlPattern("/service/*");
         environment.jersey().register(new CoffeeShopResource());
 
     }
