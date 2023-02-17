@@ -1,22 +1,18 @@
-apply plugin: 'java'
-
-version = '1.0'
+plugins {
+    id 'java'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'io.dropwizard:dropwizard-core:0.7.1'
-    compile 'io.dropwizard:dropwizard-assets:0.7.1'
-    compile 'org.mongodb.morphia:morphia:1.0.0'
+    implementation 'io.dropwizard:dropwizard-core:0.7.1'
+    implementation 'io.dropwizard:dropwizard-assets:0.7.1'
+    implementation 'org.mongodb.morphia:morphia:1.0.0'
 
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testCompile 'cglib:cglib-nodep:3.1'
-    testCompile 'org.objenesis:objenesis:2.1'
-    testCompile 'org.codehaus.groovy:groovy-all:2.4.0'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    testImplementation 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testImplementation 'cglib:cglib-nodep:3.1'
+    testImplementation 'org.objenesis:objenesis:2.1'
+    testImplementation 'org.codehaus.groovy:groovy-all:2.4.0'
 }
